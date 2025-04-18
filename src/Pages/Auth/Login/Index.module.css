@@ -70,3 +70,10 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.back_button {
+    position: absolute;
+    top: 6%;
+    left: 4%;
+    cursor: pointer;
+}

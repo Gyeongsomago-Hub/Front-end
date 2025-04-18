@@ -1,0 +1,55 @@
+.main_container {
+  width: 400px;
+  height: 220px;
+  padding: 12px;
+  border: 1px solid #f8f9fa;
+  box-shadow: 0.5px 0.5px 10px #00000025;
+  border-radius: 7px;
+  margin: 0 15px;
+  cursor: pointer;
+  transition: 0.2s all ease-in-out;
+}
+
+.main_container:hover {
+  box-shadow: 4px 4px 10px #00000025;
+  transform: scale(1.05);
+}
+
+.end {
+  width: 85px;
+  height: 30px;
+  font-size: 15px;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40px;
+  margin-bottom: 10px;
+  background-color: red;
+}
+
+.imminent {
+  width: 85px;
+  height: 30px;
+  font-size: 15px;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40px;
+  margin-bottom: 10px;
+  background-color: #ffbb3c;
+}
+
+.recruitment {
+  width: 85px;
+  height: 30px;
+  font-size: 15px;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40px;
+  margin-bottom: 10px;
+  background-color: #3CFF69;
+}

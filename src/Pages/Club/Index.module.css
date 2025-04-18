@@ -1,4 +1,4 @@
-.container {
+.Container {
     display: flex;
     height: 100vh;
     width: 100%;
@@ -11,19 +11,32 @@
     position: relative;
     top: calc(50% - 80px);
     transform: translate(0, -50%);
+    display: flex;
 }
 
 .card_container {
     width: 100%;
     height: 250px;
-    margin: 25px auto;
-    display: flex;
+    justify-content: center;
+}
+.big_card_container {
+    width: 100%;
+    height: 1005px;
     justify-content: center;
 }
 
+.big_card_container>div {
+    margin: 35px 0;
+}
+
 .card_main_container {
-    width: 1300px;
-    margin: 0 auto;
+    width: 600px;
+    height: 100vh;
+}
+
+.big_card_main_container {
+    width: 640px;
+    height: 100vh;
 }
 
 .card_main_container > h3 {
