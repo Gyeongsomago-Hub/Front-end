@@ -79,12 +79,12 @@ export default function Join() {
         <h2>회원가입</h2>
         <div className={style.all_form}>
           <div className={style.form_container}>
-            <Input Type="text" Placeholder="아이디를 입력해주세요." Width="300px" Height="35px" onValueChange={setIdValue} />
-            <Input Type="password" Placeholder="비밀번호를 입력해주세요." Width="300px" Height="35px" onValueChange={setPasswordValue} />
-            <Input Type="password" Placeholder="비밀번호를 재입력해주세요." Width="300px" Height="35px" onValueChange={setRePasswordValue} />
+            <Input Name="아이디" Type="text" Placeholder="아이디를 입력해주세요." Width="300px" Height="35px" onValueChange={setIdValue} />
+            <Input Name="비밀번호" Type="password" Placeholder="비밀번호를 입력해주세요." Width="300px" Height="35px" onValueChange={setPasswordValue} />
+            <Input Name="비밀번호 재입력" Type="password" Placeholder="비밀번호를 재입력해주세요." Width="300px" Height="35px" onValueChange={setRePasswordValue} />
           </div>
           <div className={style.form_container}>
-            <Input Type="text" Placeholder="이름을 입력해주세요." Width="300px" Height="35px" onValueChange={setNameValue} />
+            <Input Name="이름" Type="text" Placeholder="이름을 입력해주세요." Width="300px" Height="35px" onValueChange={setNameValue} />
             <div className={style.select_input_double}>
               <div className={style.selection_box}>
                 <div className={style.select_text} onClick={() => setEnterFloor(!enterFloor)}>

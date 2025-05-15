@@ -1,0 +1,28 @@
+.container {
+    width: 100%;
+    height: 100vh;
+}
+
+.card_box {
+    width: calc(100% - 250px);
+    height: 100vh;
+    float: left;
+    display: flex;
+}
+
+.card_container {
+    width: 33%;
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    overflow: scroll;
+}
+
+.card_container>h3 {
+    margin-top: 10px;
+}
+
+.card_main_container>div {
+    margin-top: 10px;
+}

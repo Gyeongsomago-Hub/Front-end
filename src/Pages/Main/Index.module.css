@@ -1,36 +1,37 @@
 .container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
+  width: 100%;
+  height: 100vh;
 }
 
-.main {
-    float: left;
-    width: calc(100% - 250px);
-    height: calc(260px * 3);
-    position: relative;
-    top: calc(50% - 80px);
-    transform: translate(0, -50%);
+.card_box_container {
+  width: calc(100% - 250px);
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  float: left;
+  align-items: center;
+  justify-content: center;
 }
 
-.card_container {
-    width: 100%;
-    height: 250px;
-    margin: 25px auto;
-    display: flex;
-    justify-content: center;
+.card_main_container>h3 {
+  margin: 0 0 10px 92px;
+  cursor: pointer;
+}
+
+.card_main_container>h3>img {
+  transform: rotate(180deg);
+  width: 12px;
+  margin-left: 10px;
 }
 
 .card_main_container {
-    width: 1300px;
-    margin: 0 auto;
+  width: 100%;
+  height: 28vh;
+  margin-bottom: 32px;
 }
 
-.card_main_container > h3 {
-    margin-left: 15px;
+.card_item {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
-
-.main > h3 {
-    cursor: pointer;
-}
-

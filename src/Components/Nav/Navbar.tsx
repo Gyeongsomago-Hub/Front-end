@@ -5,7 +5,6 @@ import logo from '../../Assets/img/Frame 10.png'
 
 const NavItems = [
   { path: "/", label: "🏠 메인페이지" },
-  { path: "/community", label: "💬 커뮤니티" },
   { path: "/mentor", label: "🤝 멘토멘티" },
   { path: "/club", label: "👥 동아리" },
   { path: "/projects", label: "📂 프로젝트" },
@@ -53,8 +52,8 @@ export default function Navbar() {
           {
             isLogin ?
             <div>
-              <span>{localStorage.getItem('username')}님</span>
-              <button onClick={() => logout()}>로그아웃</button>
+              <span onClick={() => navigate('/mypage')}>{localStorage.getItem('username')}님</span>
+              <button className={styles.logout_button} onClick={() => logout()}>로그아웃</button>
             </div> :
             <div className={styles.auth_container}>
               <Link to="/login">로그인</Link>

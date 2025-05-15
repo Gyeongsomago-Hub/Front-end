@@ -121,10 +121,10 @@
     border-radius: 7px;
     background-color: #4340FF;
     color: white;
-    z-index: -10;
+    z-index: 0;
     cursor: pointer;
 }
-
+ 
 .background_blue {
     width: 550px;
     height: 550px;

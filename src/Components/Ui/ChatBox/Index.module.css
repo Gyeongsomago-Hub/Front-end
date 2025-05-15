@@ -1,0 +1,25 @@
+.container {
+    background-color: #f5f5f5;
+    padding: 12px;
+    border-radius: 8px;
+    /* 높이가 늘어날 때 자식에 맞춰 같이 늘어납니다 */
+    display: inline-block; /* 또는 width: 100% 등 레이아웃에 맞춰 조정 */
+  }
+  
+  .textarea {
+    width: 500px;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    resize: none;      /* 사용자가 드래그로 크기 조절 못 하게 */
+    overflow: hidden;  /* 스크롤바 숨기기 */
+    font-size: 0.9rem;
+    line-height: 3;
+    background: transparent;
+    transition: height 0.1s ease-in-out; /* 부드러운 리사이징 */
+
+  }
+  
+  @media screen and (min-width: 1800px) and (max-width: 1800px) {
+    
+  }

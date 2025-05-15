@@ -1,0 +1,12 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    /* 절대 가로 넘침 금지 */
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  

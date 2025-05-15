@@ -52,6 +52,7 @@ export default function NormarCard({ Status, Title, DetailText, WriteUser, Write
                 </div>
             </div>
             <span>{WriteUser} · {WriteDate}</span>
+            <button className={style.button}>신청 하기</button>
         </div>
     )
 }

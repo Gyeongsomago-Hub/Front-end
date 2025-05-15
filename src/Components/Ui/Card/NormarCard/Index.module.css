@@ -1,5 +1,5 @@
 .main_container {
-  width: 400px;
+  width: 340px;
   height: 220px;
   padding: 12px;
   border: 1px solid #f8f9fa;
@@ -12,7 +12,7 @@
 
 .main_container:hover {
   box-shadow: 4px 4px 10px #00000025;
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .end {
@@ -51,5 +51,44 @@
   justify-content: center;
   border-radius: 40px;
   margin-bottom: 10px;
-  background-color: #3CFF69;
+  background-color: #3cff69;
+}
+
+.button {
+  position: relative;
+  left: 38%;
+  background-color: #3cff69;
+  width: 100px;
+  height: 34px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .main_container {
+    width: 350px;
+    height: 220px;
+    padding: 12px;
+    border: 1px solid #f8f9fa;
+    box-shadow: 0.5px 0.5px 10px #00000025;
+    border-radius: 7px;
+    margin: 10px 15px;
+    cursor: pointer;
+    transition: 0.2s all ease-in-out;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .main_container {
+    width: 430px;
+    height: 260px;
+    padding: 12px;
+    border: 1px solid #f8f9fa;
+    box-shadow: 0.5px 0.5px 10px #00000025;
+    border-radius: 7px;
+    margin: 0 15px;
+    cursor: pointer;
+    transition: 0.2s all ease-in-out;
+  }
 }

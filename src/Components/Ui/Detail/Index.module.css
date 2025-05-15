@@ -1,0 +1,10 @@
+.container {
+  width: 90%;
+  height: 90vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 1px 1px 10px -2px rgb(97, 97, 97);
+}

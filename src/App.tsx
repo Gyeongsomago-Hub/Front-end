@@ -1,17 +1,16 @@
 import { Routes, Route } from 'react-router-dom'
-import { Home, Join, Login, RoadMap } from './Pages'
-import { Navbar } from './Components'
-import style from './App.module.css'
-import Club from './Pages/Club/Index'
+import { Club, Home, Join, Login, Mentor, MyPage, Project, RoadMap } from './Pages'
+import './App.css'
 
 const RouterItem = [
   { path: "/", element: <Home /> },
-  { path: "/community", element: <div>community</div> },
   { path: "/club", element: <Club/> },
-  { path: "/projects", element: <div>project</div> },
+  { path: "/projects", element: <Project/> },
   { path: "/learning", element: <RoadMap /> },
+  { path: "/mentor", element: <Mentor/> },
   { path: "/login", element: <Login /> },
-  { path: "/join", element: <Join /> }
+  { path: "/join", element: <Join /> },
+  { path: "/mypage", element: <MyPage/>}
 ]
 
 function App() {

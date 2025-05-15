@@ -1,0 +1,33 @@
+.button_box {
+    width: 40px;
+    height: 40px;
+    background-color: #4340ffb8;
+    backdrop-filter: blur(5px);
+    position: absolute;
+    top: 95%;
+    left: 96%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+}
+
+.button_box>span {
+    color: white;
+    font-size: 22px;
+}
+
+.active {
+    width: 90%;
+    height: 90vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px -2px rgb(97, 97, 97);
+    transition: all 0.5s ease-in-out;
+}

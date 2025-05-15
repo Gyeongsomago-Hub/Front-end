@@ -7,9 +7,10 @@ type PropsType = {
   Width: string
   Height: string
   onValueChange?: (value: string) => void
+  Name: string
 };
 
-export default function Input({ Type, Placeholder, Width, Height, onValueChange }: PropsType) {
+export default function Input({ Type, Placeholder, Width, Height, onValueChange, Name }: PropsType) {
   const [value, setValue] = useState("")
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,13 +21,16 @@ export default function Input({ Type, Placeholder, Width, Height, onValueChange 
   };
 
   return (
-    <input
-      type={Type}
-      placeholder={Placeholder}
-      style={{ width: 309, height: 40 }}
-      className={style.inputBox}
-      value={value}
-      onChange={handleChange}
-    />
+    <div className={style.container}>
+      <span>{Name}</span>
+      <input
+        type={Type}
+        placeholder={Placeholder}
+        style={{ width: 309, height: 40 }}
+        className={style.inputBox}
+        value={value}
+        onChange={handleChange}
+      />
+    </div>
   );
 }

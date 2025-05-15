@@ -1,44 +1,160 @@
-import { useState } from "react";
-import { Navbar, Message } from "../../Components";
-import style from './Index.module.css'
+// src/pages/RoadMap.tsx
+import React, { useState, useRef, useEffect, FormEvent } from 'react';
+import axios from 'axios';
+import { Navbar, Message } from '../../Components';
+import style from './Index.module.css';
 
+interface ChatMessage {
+    id: string;
+    content: string;
+    sender: 'user' | 'bot';
+}
 
 export default function RoadMap() {
-    const [prompt, setPrompt] = useState<string>('')
+    const [inputValue, setInputValue] = useState<string>('');
+    const [stackValue, setStackValue] = useState<string>('');
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [messageType, setMessageType] = useState<'error' | 'success' | 'normal'>('normal');
+    const [sysMessage, setSysMessage] = useState<string>('');
+    const taRef = useRef<HTMLTextAreaElement | null>(null);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    // 오류, 완료 메세지 관련 코드
-    const [messageType, setMessageType] = useState<'error' | 'success' | 'nomal'>('nomal')
-    const [message, setMessage] = useState<string>('')
+    // textarea 자동 높이
+    useEffect(() => {
+        const ta = taRef.current;
+        if (!ta) return;
+        ta.style.height = 'auto';
+        ta.style.height = `${ta.scrollHeight}px`;
+    }, [inputValue]);
 
-    function onSubmitForm() {
-        if (prompt === '') {
-            setMessageType('error');
-            setMessage('프롬프트를 입력해주세요!');
+    // 새 메시지 시 자동 스크롤
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages, loading]);
+
+    // AI 답변 타이핑 효과
+    const typeBotMessage = (fullText: string) => {
+        const id = Date.now().toString();
+        setMessages(prev => [...prev, { id, content: '', sender: 'bot' }]);
+        fullText.split('').forEach((char, idx) => {
             setTimeout(() => {
-                setMessage('')
-                setMessageType('nomal');
-            }, 3000);
+                setMessages(prev =>
+                    prev.map(m =>
+                        m.id === id ? { ...m, content: m.content + char } : m
+                    )
+                );
+            }, 40 * idx);
+        });
+    };
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        if (!inputValue.trim()) {
+            setMessageType('error');
+            setSysMessage('프롬프트를 입력해주세요!');
+            setTimeout(() => setMessageType('normal') && setSysMessage(''), 3000);
+            return;
+        } else if (!stackValue.trim()) {
+            setMessageType('error');
+            setSysMessage('분야를 선택해주세요!');
+            setTimeout(() => setMessageType('normal') && setSysMessage(''), 3000);
             return;
         }
-    }
+
+        // 1) 유저 메시지 추가
+        const userId = Date.now().toString();
+        setMessages(prev => [...prev, { id: userId, content: inputValue, sender: 'user' }]);
+        setInputValue('');
+        setLoading(true);
+
+        // 2) 헤더 준비 (토큰)
+        const token = localStorage.getItem('accessToken');
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (token) headers.Authorization = `Bearer ${token}`;
+
+        try {
+            // 3) POST 요청
+            const res = await axios.post(
+                'http://localhost:8060/api/ai',
+                {
+                    stduyStyle: inputValue,
+                    stduyField: stackValue
+                },
+                { headers }
+            );
+
+            // 4) 서버가 주는 roadmap 필드를 사용
+            const aiText: string = res.data.roadmap;
+            typeBotMessage(aiText);
+
+        } catch (err: any) {
+            const errMsg = axios.isAxiosError(err)
+                ? err.response?.data?.message || '서버 오류가 발생했습니다.'
+                : err.message;
+            setMessageType('error');
+            setSysMessage(errMsg);
+            setTimeout(() => setMessageType('normal') && setSysMessage(''), 3000);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className={style.container}>
-            {
-                messageType === 'nomal' ? '' : <Message Message={message} MessageType={messageType} />
-            }
+            {messageType !== 'normal' && <Message Message={sysMessage} MessageType={messageType} />}
             <Navbar />
-            <div>
-                <div>
-
+            <div className={style.chat_container}>
+                <div className={style.chat_list_box}>
+                    {messages.length === 0 && !loading ? (
+                        <div className={style.welcome_text_box}>
+                            <h3>어떤 분야를 공부하고 싶으신가요?</h3>
+                        </div>
+                    ) : (
+                        <>
+                            {messages.map(msg => (
+                                <div
+                                    key={msg.id}
+                                    className={msg.sender === 'user' ? style.userMessage : style.botMessage}
+                                >
+                                    {msg.content}
+                                </div>
+                            ))}
+                            {loading &&
+                                <div className={style.loading}>
+                                    <div className={style.loading_element1}></div>
+                                    <div className={style.loading_element2}></div>
+                                    <div className={style.loading_element3}></div>
+                                </div>}
+                            <div ref={messagesEndRef} />
+                        </>
+                    )}
                 </div>
-                <form onSubmit={(e) => {
-                    e.preventDefault
-                    onSubmitForm()
-                }}>
-                    <input type="text" onChange={(e) => { setPrompt(e.target.value) }} />
-                    <button type="submit">보내기</button>
+                <form className={style.input_box} onSubmit={handleSubmit}>
+                    <div className={style.textareaWrapper}>
+                        <textarea
+                            ref={taRef}
+                            className={style.textarea}
+                            value={inputValue}
+                            onChange={e => setInputValue(e.target.value)}
+                            placeholder="메시지를 입력하세요..."
+                            rows={1}
+                        />
+                        <select
+                            onChange={e => setStackValue(e.target.value)}
+                            className={style.select}
+                        >
+                            <option value="">분야를 선택 해주세요.</option>
+                            <option value="프론트 엔드">프론트 엔드</option>
+                            <option value="백엔드">백엔드</option>
+                            <option value="데브 옵스">데브 옵스</option>
+                        </select>
+                        <button type="submit" className={style.sendButton} disabled={loading}>
+                            {loading ? '전송중...' : '전송'}
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
-    )
+    );
 }
