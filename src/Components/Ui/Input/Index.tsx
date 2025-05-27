@@ -10,7 +10,7 @@ type PropsType = {
   Name: string
 };
 
-export default function Input({ Type, Placeholder, Width, Height, onValueChange, Name }: PropsType) {
+export default function Input({ Type, Placeholder, onValueChange, Name }: PropsType) {
   const [value, setValue] = useState("")
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

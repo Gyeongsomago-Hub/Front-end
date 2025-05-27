@@ -52,7 +52,7 @@ export default function Navbar() {
           {
             isLogin ?
             <div>
-              <span onClick={() => navigate('/mypage')}>{localStorage.getItem('username')}님</span>
+              <span onClick={() => navigate('/mypage')}>{localStorage.getItem('name')} 님</span>
               <button className={styles.logout_button} onClick={() => logout()}>로그아웃</button>
             </div> :
             <div className={styles.auth_container}>

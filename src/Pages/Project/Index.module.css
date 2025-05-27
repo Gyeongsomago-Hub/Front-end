@@ -1,6 +1,219 @@
+/* 전체 컨테이너 */
+.project_card_box {
+  width: calc(100% - 250px);
+  height: 100vh;
+  float: left;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #ffffff; /* 기존 색상 유지 */
+  overflow-y: auto; /* 긴 콘텐츠 스크롤 가능 */
+}
+
+.project_card_box h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #1f2937; /* 기존 다크 색상 */
+}
+
+/* 버튼 박스 */
 .button_box {
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    background-color: blue;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* 이전 CSS의 그라디언트 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.button_box:hover {
+  transform: scale(1.05);
+}
+
+/* 카드 그리드 */
+.card_item {
+  width: 100%;
+  margin: 10px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개 카드 */
+  gap: 16px;
+  justify-content: center;
+}
+
+/* 개별 카드 */
+.cardBox {
+  padding: 20px;
+  background: white; /* 이전 CSS의 .projectCard 색상 */
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s;
+}
+
+.cardBox:hover {
+  transform: translateY(-4px);
+}
+
+/* 카드 내부 요소 (Card 컴포넌트 가정) */
+.cardItem {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937; /* 기존 다크 색상 */
+}
+
+.cardContent {
+  font-size: 1rem;
+  color: #4b5563; /* 기존 회색 */
+  line-height: 1.6;
+}
+
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280; /* 기존 회색 */
+}
+
+.cardStatus {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cardStatus.recruitment {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.cardStatus.imminent {
+  background-color: rgba(251, 191, 36, 0.2);
+  color: #d97706;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.cardStatus.end {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.cardStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.stackItem {
+  padding: 0.5rem 1rem;
+  background: #f3f4f6; /* 이전 CSS의 .stackItem */
+  color: #374151;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  transition: all 0.2s;
+}
+
+.stackItem:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+/* 모달 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white; /* 기존 색상 유지 */
+  padding: 20px;
+  border-radius: 16px;
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6b7280; /* 기존 회색 */
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.closeButton:hover {
+  background: #f3f4f6;
+}
+
+/* 에러 메시지 */
+.errorMessage {
+  color: #ef4444; /* 기존 빨간색 */
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .card_item {
+    grid-template-columns: repeat(2, 1fr); /* 1024px 이하에서 2개 */
+  }
+}
+
+@media (max-width: 768px) {
+  .project_card_box {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .card_item {
+    grid-template-columns: 1fr; /* 모바일에서 1개 */
+  }
+
+  .modalContent {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .button_box {
+    width: 150px;
+    height: 150px;
+    right: 1rem;
+    bottom: 1rem;
+  }
 }

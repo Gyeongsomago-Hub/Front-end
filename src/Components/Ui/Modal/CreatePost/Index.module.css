@@ -1,95 +1,96 @@
 .modal_wrap {
-    position: relative;
-    background: #fff;
-    padding: 24px;
-    border-radius: 8px;
-    width: 360px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-  
-  .close_button {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: transparent;
-    border: none;
-    font-size: 1.1rem;
-    cursor: pointer;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .label {
-    font-size: 0.9rem;
-    margin-top: 8px;
-  }
-  
-  /* 태그 입력 영역 */
-  .tagInputWrapper {
-    display: flex;
-    gap: 8px;
-  }
-  
-  .tagTextInput {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .tagAddButton {
-    padding: 0 12px;
-    background-color: #0063f7;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  /* 태그 미리보기 */
-  .tagPreview {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 4px;
-  }
-  
-  .tag {
-    display: flex;
-    align-items: center;
-    background: #e0e0e0;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.9rem;
-  }
-  
-  .tagRemoveButton {
-    background: transparent;
-    border: none;
-    margin-left: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  /* 공통 셀렉트 박스 */
-  .select {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  /* 제출 버튼 */
-  .submit_button {
-    margin-top: 12px;
-    padding: 10px;
-    background-color: #0063f7;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
+  position: relative;
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  width: 720px; /* 모달 너비를 늘려 두 컬럼을 수용 */
+
+}
+
+.close_button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 두 컬럼으로 나눔 */
+  gap: 16px; /* 컬럼 간 간격 */
+}
+
+.label {
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+/* 태그 입력 영역 */
+.tagInputWrapper {
+  display: flex;
+  gap: 8px;
+}
+
+.tagTextInput {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.tagAddButton {
+  padding: 0 12px;
+  background-color: #0063f7;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 태그 미리보기 */
+.tagPreview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  background: #e0e0e0;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+.tagRemoveButton {
+  background: transparent;
+  border: none;
+  margin-left: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* 공통 셀렉트 박스 */
+.select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%; /* 셀렉트 박스가 컬럼에 맞게 확장 */
+}
+
+/* 제출 버튼 */
+.submit_button {
+  grid-column: 1 / -1; /* 제출 버튼은 두 컬럼을 모두 차지 */
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #0063f7;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

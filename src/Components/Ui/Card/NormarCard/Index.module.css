@@ -65,6 +65,34 @@
   cursor: pointer;
 }
 
+.container {
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.end {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.imminent {
+  background-color: #ff9900;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.recruitment {
+  background-color: #28a745;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
 @media (max-width: 768px) {
   .main_container {
     width: 350px;
