@@ -12,44 +12,53 @@
 
 .all_club_container {
     width: 56%;
-    height: 100vh;
+    min-height: 0; /* 높이를 콘텐츠에 맞게 조정 */
+    padding: 20px;
+    overflow-y: auto; /* 필요 시만 스크롤 */
 }
 
 .populer_club_container {
     width: 44%;
-    height: 100vh;
-    overflow: scroll;
+    min-height: 0; /* 높이를 콘텐츠에 맞게 조정 */
+    padding: 20px;
+    overflow-y: auto; /* 필요 시만 스크롤 */
 }
 
-.all_club_container>h3,
-.populer_club_container>h3 {
+.all_club_container > h3,
+.populer_club_container > h3 {
     margin: 20px 0;
     text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
 }
 
 .all_club_card_container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: space-between;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 반응형 그리드 */
+    gap: 15px;
+    padding: 10px;
+    align-items: stretch; /* 높이 맞춤 */
 }
 
 .populer_club_card_container {
     display: flex;
-    flex-flow: column;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
 }
 
 .all_club_card_container > div {
-    width: calc(50% - 5px); /* 정확한 카드 너비 설정 */
+    width: 100%; /* 그리드에 맞게 조정 */
     box-sizing: border-box;
 }
 
-.all_club_card_container>div>div {
-    flex: 0 1 calc(50% - 8px);    /* 한 줄에 2개: 전체 너비의 50% - gap 보정 */
+.all_club_card_container > div > div {
+    width: 100%; /* 그리드 항목에 맞게 조정 */
     box-sizing: border-box;
 }
 
+/* 반응형 디자인 */
 @media (max-width: 768px) {
     .main_contaienr {
         width: calc(100% - 250px);
@@ -58,23 +67,40 @@
         float: left;
         overflow: scroll;
     }
-    .all_club_card_container>div {
-      flex: 0 1 100%;
-    }
     .all_club_container {
         width: 100%;
-        height: 100vh;
+        min-height: 0;
     }
-    .main_contaienr{
+    .main_contaienr {
         overflow: scroll;
         flex-flow: column;
     }
     .populer_club_container {
         width: 100%;
-        height: 100vh;
-        overflow:visible;
+        min-height: 0;
+        overflow-y: auto;
     }
-    .populer_club_container>div {
-        flex: 0 1 100%;
+    .all_club_card_container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 작은 화면에 맞게 조정 */
     }
-  }
+    .populer_club_card_container > div {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .all_club_card_container {
+        grid-template-columns: 1fr; /* 한 줄에 하나 */
+    }
+    .populer_club_card_container {
+        flex-direction: column;
+    }
+    .all_club_container > h3,
+    .populer_club_container > h3 {
+        font-size: 1.2rem;
+    }
+}
+
+p {
+    text-align: center;
+}

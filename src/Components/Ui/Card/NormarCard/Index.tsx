@@ -1,7 +1,7 @@
 import style from './Index.module.css';
 
 interface propsType {
-  Status: "END" | "IMMINENT" | "RECRUITING";
+  Status: string;
   Title: string;
   DetailText: string;
   WriteUser: string;
