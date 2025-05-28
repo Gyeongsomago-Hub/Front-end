@@ -14,6 +14,7 @@ interface Project {
   openDate: string;
   closeDate: string;
   status: string;
+  name: string
 }
 
 const formatTimeDifference = (openDate: string): string => {
@@ -131,7 +132,7 @@ export default function Project() {
           Status={project.status}
           Title={project.title}
           DetailText={project.content}
-          WriteUser="김신우"
+          WriteUser={project.name}
           WriteDate={formatTimeDifference(project.openDate)}
           MinRecruimentPersonnel={min}
           MaxRecruimentPersonnel={max}

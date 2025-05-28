@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import style from './Index.module.css';
 import axios from "axios";
 import Apply from "../Apply/Index";
+import { useNavigate } from "react-router-dom";
 
 interface Project {
   id: number;
@@ -24,6 +25,7 @@ export default function Detail({ projectId }: DetailProps) {
   const [error, setError] = useState<string | null>(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate()
 
   const fetchProject = async () => {
     if (!projectId) return;
@@ -48,7 +50,12 @@ export default function Detail({ projectId }: DetailProps) {
   };
 
   const handleApplyClick = () => {
-    setIsApplyModalOpen(true);
+    if (localStorage.getItem('accessToken')) {
+      setIsApplyModalOpen(true);
+    } else {
+      alert('로그인 후 이용해주세요!')
+      navigate('/login')
+    }
   };
 
   const closeApplyModal = () => {
@@ -194,8 +201,8 @@ export default function Detail({ projectId }: DetailProps) {
 
         {/* 액션 버튼 */}
         <div className={style.actionSection}>
-          <button 
-            className={`${style.applyButton} ${project.status === 'End' ? style.disabled : ''}`} 
+          <button
+            className={`${style.applyButton} ${project.status === 'End' ? style.disabled : ''}`}
             onClick={handleApplyClick}
             disabled={project.status === 'End'}
           >
@@ -237,7 +244,7 @@ function formatTimeDifference(openDate: string): string {
     const nowDate = new Date(now);
     const diffMs = nowDate.getTime() - writeDate.getTime();
     const diffMins = Math.floor(diffMs / 1000 / 60);
-    
+
     if (diffMins < 1) {
       return "방금 전";
     } else if (diffMins < 60) {

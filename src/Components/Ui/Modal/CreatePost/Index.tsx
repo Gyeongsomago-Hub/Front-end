@@ -67,7 +67,7 @@ export default function Modal({ Title, setClickButton }: ModalProps) {
         payload = { title, content, people, stacks, openDate, closeDate, status, type: 'PROJECT' };
         break;
       case '동아리':
-        payload = { name, description, location, target, openDate, closeDate, type: clubType };
+        payload = { name, description, location, target, openDate, closeDate, type: 'CLUB' };
         break;
       case '멘토멘티':
         payload = { title, content, people, stacks, openDate, closeDate, status, type: 'MENTORING', categoryId };

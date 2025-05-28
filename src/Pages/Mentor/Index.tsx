@@ -1,152 +1,329 @@
-import { useEffect, useState } from "react";
-import { Card, CreateButton, Navbar } from "../../Components";
-import style from './Index.module.css';
-import axios from "axios";
+// src/components/MyPage.tsx
+import { useState } from "react";
+import { Navbar } from "../../Components";
+import style from "./Index.module.css";
+import { useMypage } from "../../Hooks/useMypage"
 
-interface Mentor {
+interface User {
+  user_id: number;
+  username: string;
+  name: string;
+  grade: string;
+  classNumber: string;
+  department: string;
+  role: string;
+}
+
+interface Project {
   id: number;
   title: string;
   content: string;
   people: string;
   view_count: number;
-  stack: string[];
-  openDate: string; // ISO 8601 형식 또는 YYYY-MM-DD (시간 정보 가정)
+  stack: string[] | undefined;
+  openDate: string;
   closeDate: string;
   status: string;
-  categoryId: number; // 1: 웹개발, 2: 앱개발, 3: 기타
+  userId: number;
+  name: string;
 }
 
-// 작성 시간과 현재 시간의 차이를 계산하는 함수
-const formatTimeDifference = (openDate: string): string => {
-  try {
-    // 시간 정보가 없으면 자정으로 가정
-    const writeDate = new Date(openDate.includes('T') ? openDate : `${openDate}T00:00:00`);
-    if (isNaN(writeDate.getTime())) {
-      return "날짜 형식 오류";
-    }
-    const now = new Date();
-    const diffMs = now.getTime() - writeDate.getTime();
-    const diffMins = Math.floor(diffMs / 1000 / 60);
-    if (diffMins < 60) {
-      return `${diffMins}분 전`;
-    } else {
-      const diffHours = Math.floor(diffMins / 60);
-      return `${diffHours}시간 전`;
-    }
-  } catch {
-    return "날짜 처리 오류";
-  }
-};
+interface Participation {
+  part_id: string;
+  introduce: string;
+  position: string;
+  type: string;
+  status: string;
+}
 
-export default function Mentor() {
-  const [mentors, setMentors] = useState<Mentor[]>([]);
-  const [error, setError] = useState<string | null>(null);
+export default function MyPage() {
+  const { user, projects, participations, loading, errorMessage, formatDate, formatTimeDifference } = useMypage();
+  const [activeTab, setActiveTab] = useState<"applications" | "posts">("applications");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const fetchMentors = async () => {
-    try {
-      const response = await axios.get('http://localhost:8060/api/mentoring', {
-        withCredentials: true, // 쿠키 기반 인증
-      });
+  const handleTabClick = (tab: "applications" | "posts") => {
+    setActiveTab(tab);
+  };
 
-      if (response.data.code && response.data.code === 403) {
-        setError(`권한 오류: ${response.data.msg || "접근이 거부되었습니다."}`);
-        return;
-      }
+  const userProjects = user ? projects.filter((project) => project.userId === user.user_id) : [];
 
-      setMentors(response.data);
-    } catch (error: any) {
-      console.error('오류 상세:', error.response ? error.response.data : error.message);
-      setError(error.response?.data?.msg || '멘토멘티 데이터를 불러오지 못했습니다.');
+  const openModal = (project: Project) => {
+    setSelectedProject(project);
+  };
+
+  const closeModal = () => {
+    setSelectedProject(null);
+  };
+
+  const getStatusInfo = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "recruitment":
+      case "recruiting":
+        return { text: "모집중", className: style.statusRecruitment };
+      case "imminent":
+        return { text: "마감 임박", className: style.statusImminent };
+      case "end":
+      case "closed":
+        return { text: "모집 마감", className: style.statusClosed };
+      default:
+        return { text: "모집중", className: style.statusRecruitment };
     }
   };
 
-  useEffect(() => {
-    fetchMentors();
-  }, []);
-
-  // 카테고리별 데이터 필터링
-  const webMentors = mentors.filter((mentor) => mentor.categoryId === 1);
-  const appMentors = mentors.filter((mentor) => mentor.categoryId === 2);
-  const otherMentors = mentors.filter((mentor) => mentor.categoryId === 3);
+  const getParticipationStatusInfo = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "requested":
+        return { text: "요청됨", className: style.statusRequested };
+      case "accepted":
+        return { text: "수락됨", className: style.statusAccepted };
+      case "rejected":
+        return { text: "거절됨", className: style.statusRejected };
+      default:
+        return { text: "요청됨", className: style.statusRequested };
+    }
+  };
 
   return (
     <div className={style.container}>
       <Navbar />
-      <div className={style.card_box}>
-        <div className={style.card_container}>
-          <h3>웹개발 멘토멘티</h3>
-          <div className={style.card_main_container}>
-            {error ? (
-              <p style={{ color: 'red' }}>{error}</p>
-            ) : webMentors.length > 0 ? (
-              webMentors.map((mentor) => (
-                <Card
-                  key={mentor.id}
-                  Status={mentor.status}
-                  Title={mentor.title}
-                  DetailText={mentor.content}
-                  WriteUser="김신우" // API에 없으므로 임시 값
-                  WriteDate={formatTimeDifference(mentor.openDate)}
-                  MinRecruimentPersonnel={parseInt(mentor.people.split("~")[0].trim())}
-                  MaxRecruimentPersonnel={parseInt(mentor.people.split("~")[1].trim().replace("명", ""))}
-                  Stack={mentor.stack.join(", ")}
-                />
-              ))
-            ) : (
-              <p>데이터가 없습니다!</p>
-            )}
+      <div className={style.mainContainer}>
+        {loading ? (
+          <div className={style.loading}>
+            <p>로딩 중...</p>
           </div>
-        </div>
-        <div className={style.card_container}>
-          <h3>앱개발 멘토멘티</h3>
-          <div className={style.card_main_container}>
-            {error ? (
-              <p style={{ color: 'red' }}>{error}</p>
-            ) : appMentors.length > 0 ? (
-              appMentors.map((mentor) => (
-                <Card
-                  key={mentor.id}
-                  Status={mentor.status}
-                  Title={mentor.title}
-                  DetailText={mentor.content}
-                  WriteUser="김신우" // API에 없으므로 임시 값
-                  WriteDate={formatTimeDifference(mentor.openDate)}
-                  MinRecruimentPersonnel={parseInt(mentor.people.split("~")[0].trim())}
-                  MaxRecruimentPersonnel={parseInt(mentor.people.split("~")[1].trim().replace("명", ""))}
-                  Stack={mentor.stack.join(", ")}
-                />
-              ))
-            ) : (
-              <p>데이터가 없습니다!</p>
-            )}
+        ) : errorMessage ? (
+          <div className={style.error}>
+            <p>{errorMessage}</p>
           </div>
-        </div>
-        <div className={style.card_container}>
-          <h3>기타 멘토멘티</h3>
-          <div className={style.card_main_container}>
-            {error ? (
-              <p style={{ color: 'red' }}>{error}</p>
-            ) : otherMentors.length > 0 ? (
-              otherMentors.map((mentor) => (
-                <Card
-                  key={mentor.id}
-                  Status={mentor.status}
-                  Title={mentor.title}
-                  DetailText={mentor.content}
-                  WriteUser="김신우" // API에 없으므로 임시 값
-                  WriteDate={formatTimeDifference(mentor.openDate)}
-                  MinRecruimentPersonnel={parseInt(mentor.people.split("~")[0].trim())}
-                  MaxRecruimentPersonnel={parseInt(mentor.people.split("~")[1].trim().replace("명", ""))}
-                  Stack={mentor.stack.join(", ")}
-                />
-              ))
-            ) : (
-              <p>데이터가 없습니다!</p>
-            )}
+        ) : user ? (
+          <div className={style.contentWrapper}>
+            <div className={style.header}>
+              <div className={style.userInfo}>
+                <div className={style.userName}>{user.name}</div>
+                <div className={style.userDetails}>
+                  <span>{user.grade}학년</span>
+                  <span>{user.classNumber}반</span>
+                  <span>{user.department}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={style.mainContent}>
+              <div className={style.statsSection}>
+                <div className={style.statCard} onClick={() => handleTabClick("posts")}>
+                  <div className={style.statNumber}>{userProjects.length}</div>
+                  <div className={style.statLabel}>작성한 게시물</div>
+                </div>
+                <div className={style.statCard} onClick={() => handleTabClick("applications")}>
+                  <div className={style.statNumber}>{participations.length}</div>
+                  <div className={style.statLabel}>신청한 활동</div>
+                </div>
+              </div>
+
+              <div className={style.contentTabs}>
+                <button
+                  className={`${style.tabButton} ${activeTab === "applications" ? style.active : ""}`}
+                  onClick={() => handleTabClick("applications")}
+                >
+                  내 참가 요청들
+                </button>
+                <button
+                  className={`${style.tabButton} ${activeTab === "posts" ? style.active : ""}`}
+                  onClick={() => handleTabClick("posts")}
+                >
+                  내가 올린 게시물
+                </button>
+              </div>
+
+              <div className={style.sectionsContainer}>
+                {activeTab === "applications" && (
+                  <div>
+                    {participations.length > 0 ? (
+                      <div className={style.contentGrid}>
+                        {participations.map((participation) => (
+                          <div key={participation.part_id} className={style.contentCard}>
+                            <h4 className={style.cardProjectTitle}>{participation.type}</h4>
+                            <p className={style.projectContent}>{participation.introduce}</p>
+                            <div className={style.projectMeta}>
+                              <span>포지션: {participation.position}</span>
+                              <span
+                                className={`${style.projectStatus} ${
+                                  getParticipationStatusInfo(participation.status).className
+                                }`}
+                              >
+                                상태: {getParticipationStatusInfo(participation.status).text}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className={style.emptyState}>
+                        <div className={style.emptyStateIcon}>📝</div>
+                        <h3>참가 요청이 없습니다</h3>
+                        <p>동아리, 프로젝트, 멘토링에 참가 신청을 해보세요!</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeTab === "posts" && (
+                  <div>
+                    {userProjects.length > 0 ? (
+                      <div className={style.contentGrid}>
+                        {userProjects.map((project) => (
+                          <div
+                            key={project.id}
+                            className={style.contentCard}
+                            onClick={() => openModal(project)}
+                          >
+                            <h4 className={style.cardProjectTitle}>{project.title}</h4>
+                            <p className={style.projectContent}>{project.content}</p>
+                            <div className={style.projectMeta}>
+                              <span>모집 인원: {project.people}</span>
+                              <span>조회수: {project.view_count}</span>
+                              <span>기술 스택: {(project.stack || []).join(", ")}</span>
+                            </div>
+                            <div className={style.projectDates}>
+                              <span>시작일: {formatDate(project.openDate)}</span>
+                              <span>종료일: {formatDate(project.closeDate)}</span>
+                            </div>
+                            <div
+                              className={`${style.projectStatus} ${
+                                getStatusInfo(project.status).className
+                              }`}
+                            >
+                              상태: {getStatusInfo(project.status).text}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className={style.emptyState}>
+                        <div className={style.emptyStateIcon}>✏️</div>
+                        <h3>작성한 게시물이 없습니다</h3>
+                        <p>첫 번째 게시물을 작성해보세요!</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className={style.error}>
+            <p>사용자 정보를 불러오지 못했습니다.</p>
+          </div>
+        )}
       </div>
-      <CreateButton Title="멘토멘티" />
+
+      {selectedProject && (
+        <div className={style.modal} onClick={closeModal}>
+          <div className={style.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={style.projectCard}>
+              <div className={style.projectHeader}>
+                <div className={style.titleSection}>
+                  <h1 className={style.projectTitle}>{selectedProject.title}</h1>
+                  <span
+                    className={`${style.statusBadge} ${getStatusInfo(selectedProject.status).className}`}
+                  >
+                    {getStatusInfo(selectedProject.status).text}
+                  </span>
+                </div>
+                <div className={style.metaInfo}>
+                  <span className={style.viewCount}>
+                    <svg className={style.icon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                    조회 {selectedProject.view_count}회
+                  </span>
+                  <span className={style.updateTime}>{formatTimeDifference(selectedProject.openDate)}</span>
+                </div>
+              </div>
+
+              <div className={style.projectContent}>
+                <div className={style.description}>
+                  <h3>프로젝트 설명</h3>
+                  <p>{selectedProject.content}</p>
+                </div>
+
+                <div className={style.infoGrid}>
+                  <div className={style.infoItem}>
+                    <div className={style.infoLabel}>
+                      <svg className={style.icon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                        />
+                      </svg>
+                      모집 인원
+                    </div>
+                    <div className={style.infoValue}>{selectedProject.people}</div>
+                  </div>
+
+                  <div className={style.infoItem}>
+                    <div className={style.infoLabel}>
+                      <svg className={style.icon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                      작성자
+                    </div>
+                    <div className={style.infoValue}>{selectedProject.name || "알 수 없음"}</div>
+                  </div>
+
+                  <div className={style.infoItem}>
+                    <div className={style.infoLabel}>
+                      <svg className={style.icon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3a4 4 0 118 0v4m-4 8a2 2 0 11-4 0 2 2 0 014 0zM8 7a2 2 0 11-4 0 2 2 0 014 0zm8 0a2 2 0 11-4 0 2 2 0 014 0z"
+                        />
+                      </svg>
+                      마감일
+                    </div>
+                    <div className={style.infoValue}>{formatDate(selectedProject.closeDate)}</div>
+                  </div>
+                </div>
+
+                <div className={style.stackSection}>
+                  <h3>필요한 기술 스택</h3>
+                  <div className={style.stackList}>
+                    {(selectedProject.stack || []).map((tech, index) => (
+                      <span key={index} className={style.stackItem}>
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button className={style.modalClose} onClick={closeModal}>
+              닫기
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
